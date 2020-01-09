@@ -1,0 +1,54 @@
+the goal of exercise 2 is to use the PL011 UART instead of the mini-uart
+
+instead of alt5 (for gpio conf), we'll want alt0
+alt5 is for mini-uart (uart1). alt0 is for uart0 (PL011)
+this way we can use the same pins
+
+13.4 Register View
+The PL011 UART is mapped on base adderss 0x7E201000. It has the following memory-
+mapped registers.
+
+Address
+Register Name
+Offset Description Size
+0x0 DR Data Register 32
+0x4 RSRECR 32
+0x18 FR
+
+Flag register
+32
+
+---------------------------------
+0x20 ILPR not in use 32
+0x24 IBRD Integer Baud rate divisor 32
+0x28 FBRD Fractional Baud rate divisor 32
+0x2c LCRH Line Control register 32
+0x30 CR Control register 32
+0x34 IFLS Interupt FIFO Level Select Register 32
+0x38 IMSC Interupt Mask Set Clear Register 32
+0x3c RIS Raw Interupt Status Register 32
+0x40 MIS Masked Interupt Status Register 32
+0x44 ICR Interupt Clear Register 32
+0x48 DMACR DMA Control Register 32
+0x80 ITCR Test Control register 32
+0x84 ITIP Integration test input reg 32
+0x88 ITOP Integration test output reg 32
+0x8c TDR Test Data reg 32
+
+DR Register
+
+Synopsis The UART_DR Register is the data register. For words to be transmitted:
+if the FIFOs are enabled, data written to this location is pushed onto the
+transmit FIFO.
+if the FIFOs are not enabled, data is stored in the transmitter holding register
+(the bottom word of the transmit FIFO).
+The write operation initiates transmission from the UART. The data is prefixed
+with a start bit, appended with the appropriate parity bit (if parity is enabled),
+and a stop bit. The resultant word is then transmitted.
+For received words:
+if the FIFOs are enabled, the data byte and the 4-bit status (break, frame,
+parity, and overrun) is pushed onto the 12-bit wide receive FIFO
+if the FIFOs are not enabled, the data byte and status are stored in the
+receiving holding register (the bottom word of the receive FIFO).
+
+
